@@ -122,16 +122,11 @@ const getDoctorsBySpecialization = asyncHandler(async (req, res) => {
       const doctors = await Doctor.find();
   
       // Map to return only the required details: name, specialization, and availableTimeSlots
-      const doctorList = doctors.map(doctor => ({
-        name: doctor.name,
-        specialization: doctor.specialization,
-        availableTimeSlots: doctor.availableTimeSlots,
-      }));
   
       // Return the list of doctors
       return res.status(200).json({
         success: true,
-        data: doctorList,
+        data: doctors,
         message: "Doctors fetched successfully",
       });
     } catch (error) {
