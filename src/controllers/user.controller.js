@@ -118,24 +118,20 @@ const loginUser = asyncHandler(async (req, res) =>{
 
 const getDoctorsBySpecialization = asyncHandler(async (req, res) => {
     try {
-      // Fetch all doctors from the database
       const doctors = await Doctor.find();
   
-      // Map to return only the required details: name, specialization, and availableTimeSlots
       const doctorList = doctors.map(doctor => ({
         name: doctor.name,
         specialization: doctor.specialization,
         availableTimeSlots: doctor.availableTimeSlots,
       }));
   
-      // Return the list of doctors
       return res.status(200).json({
         success: true,
         data: doctorList,
         message: "Doctors fetched successfully",
       });
     } catch (error) {
-      // Handle any errors during the database query
       return res.status(500).json({
         success: false,
         message: "Server error while fetching doctors",
