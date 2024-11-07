@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { 
     loginUser, 
-    logoutUser, 
     registerUser,
     getDoctorsBySpecialization
 } from "../controllers/user.controller.js";
@@ -15,7 +14,6 @@ router.route("/register").post(
     )
 router.route("/login").post(loginUser)
 //secured routes
-router.route("/logout").post(verifyJWT,  logoutUser)
 router.route("/doctors/slots").get(verifyJWT,  getDoctorsBySpecialization)
 
 

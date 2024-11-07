@@ -19,7 +19,8 @@ const generateAccessAndRefereshTokens = async(userId) =>{
 
 const registerUser = asyncHandler( async (req, res) => {
 
-    const {fullName, email, password } = req.body
+    try {
+        const {fullName, email, password } = req.body
 
     if (
         [fullName, email, password].some((field) => field?.trim() === "")
@@ -53,11 +54,16 @@ const registerUser = asyncHandler( async (req, res) => {
     return res.status(201).json(
         new ApiResponse(200, createdUser, "User registered Successfully")
     )
+    } catch (error) {
+        console.log('Errror in User Register', error)
+        res.status(500).json({ message: "Internal server error" });
+    }
 
 } )
 
 const loginUser = asyncHandler(async (req, res) =>{
 
+   try {
     const {email, password} = req.body
     console.log(email);
 
@@ -103,36 +109,11 @@ const loginUser = asyncHandler(async (req, res) =>{
             "User logged In Successfully"
         )
     )
+   } catch (error) {
+    console.log('Errror in User Login', error)
+    res.status(500).json({ message: "Internal server error" });
+   }
 
-})
-
-const logoutUser = asyncHandler(async(req, res) => {
-    await User.findByIdAndUpdate(
-        req.user._id,
-        {
-            new: true
-        }
-    )
-
-    const options = {
-        httpOnly: true,
-        secure: true
-    }
-
-    return res
-    .status(200)
-    .clearCookie("accessToken", options)
-    .json(new ApiResponse(200, {}, "User logged Out"))
-})
-
-const getCurrentUser = asyncHandler(async(req, res) => {
-    return res
-    .status(200)
-    .json(new ApiResponse(
-        200,
-        req.user,
-        "User fetched successfully"
-    ))
 })
 
 const getDoctorsBySpecialization = asyncHandler(async (req, res) => {
@@ -168,7 +149,5 @@ const getDoctorsBySpecialization = asyncHandler(async (req, res) => {
 export {
     registerUser,
     loginUser,
-    logoutUser,
-    getCurrentUser,
     getDoctorsBySpecialization
 }
