@@ -2,7 +2,8 @@ import { Router } from "express";
 import { 
     loginUser, 
     logoutUser, 
-    registerUser, 
+    registerUser,
+    getDoctorsBySpecialization
 } from "../controllers/user.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
@@ -17,6 +18,7 @@ router.route("/login").post(loginUser)
 
 //secured routes
 router.route("/logout").post(verifyJWT,  logoutUser)
+router.route("/doctorinfo").post(verifyJWT,  getDoctorsBySpecialization)
 
 
 export default router
