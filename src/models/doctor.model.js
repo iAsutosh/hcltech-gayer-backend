@@ -1,4 +1,4 @@
-import mongoose, {Schema} from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const doctorSchema = new Schema({
     name: {
@@ -25,4 +25,4 @@ function arrayLimit(val) {
 
 const Doctor = mongoose.model('Doctor', doctorSchema);
 
-module.exports = Doctor;
+export default Doctor;
