@@ -16,7 +16,7 @@ router.route("/register").post(
 router.route("/login").post(loginUser)
 //secured routes
 router.route("/logout").post(verifyJWT,  logoutUser)
-router.route("/doctorinfo").post(verifyJWT,  getDoctorsBySpecialization)
+router.route("/doctors/slots").get(verifyJWT,  getDoctorsBySpecialization)
 
 
 export default router
