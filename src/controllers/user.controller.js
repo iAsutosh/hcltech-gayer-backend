@@ -168,10 +168,5 @@ const getDoctorsBySpecialization = asyncHandler(async (req, res) => {
 export {
     registerUser,
     loginUser,
-<<<<<<< HEAD
-    logoutUser,
-    getCurrentUser,
     getDoctorsBySpecialization
-=======
->>>>>>> fda679f (appoitment)
 }

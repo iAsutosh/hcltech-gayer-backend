@@ -1,5 +1,7 @@
+import jwt from "jsonwebtoken"
 import {asyncHandler} from "../utils/asyncHandler.js"
 import Appointment from '../models/appointments.model.js';
+import { User} from "../models/user.model.js"
 
 
 const bookAppointment = asyncHandler(async (req, res) => {
@@ -10,6 +12,20 @@ const bookAppointment = asyncHandler(async (req, res) => {
         if (!docName || !date || !time || !reason) {
             return res.status(400).json({ message: "Missing required fields" });
         }
+        // if Token present get user data
+        if(req.header("Authorization")) {
+            const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "")
+        
+            const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        
+            const user = await User.findById(decodedToken?._id).select("-password -refreshToken")
+        
+            if (!user) {
+                
+                throw new ApiError(401, "Invalid Access Token")
+            }
+            req.user = user;
+        }
 
         // Create a new appointment
         const newAppointment = new Appointment({
@@ -17,7 +33,8 @@ const bookAppointment = asyncHandler(async (req, res) => {
             date,
             time,
             reason,
-            comment
+            comment,
+            patientName: req.user ? req.user.fullName : ""
         });
 
         // Save the appointment to the database
