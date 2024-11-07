@@ -6,6 +6,11 @@ const appointmentSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    docId: {
+        type: String,
+        required: true,
+        trim: true
+    },
     date: {
         type: Date,  // Only stores the date part
         required: true
@@ -26,6 +31,10 @@ const appointmentSchema = new mongoose.Schema({
         trim: true
     },
     patientName: {
+        type: String,
+        trim: true
+    },
+    patientId: {
         type: String,
         trim: true
     }
