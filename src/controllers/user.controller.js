@@ -118,50 +118,31 @@ const loginUser = asyncHandler(async (req, res) =>{
 
 const getDoctorsBySpecialization = asyncHandler(async (req, res) => {
     try {
-        // Fetch all doctors from the database
-        const doctors = await Doctor.find();
-
-        // Group doctors by specialization
-        const groupedDoctors = doctors.reduce((acc, doctor) => {
-            // Find the specialization group or create one
-            const specializationGroup = acc.find(group => group.name === doctor.specialization);
-
-            if (specializationGroup) {
-                // If the group already exists, add the doctor to the list
-                specializationGroup.doctors.push({
-                    name: doctor.name,
-                    availableTimeSlots: doctor.availableTimeSlots
-                });
-            } else {
-                // If the group doesn't exist, create a new group with this doctor
-                acc.push({
-                    name: doctor.specialization,
-                    doctors: [{
-                        name: doctor.name,
-                        availableTimeSlots: doctor.availableTimeSlots
-                    }]
-                });
-            }
-
-            return acc;
-        }, []);
-
-        // Return the grouped data in the required format
-        return res.status(200).json({
-            success: true,
-            data: groupedDoctors,
-            message: "Doctors fetched by specialization successfully"
-        });
-
+      // Fetch all doctors from the database
+      const doctors = await Doctor.find();
+  
+      // Map to return only the required details: name, specialization, and availableTimeSlots
+      const doctorList = doctors.map(doctor => ({
+        name: doctor.name,
+        specialization: doctor.specialization,
+        availableTimeSlots: doctor.availableTimeSlots,
+      }));
+  
+      // Return the list of doctors
+      return res.status(200).json({
+        success: true,
+        data: doctorList,
+        message: "Doctors fetched successfully",
+      });
     } catch (error) {
-        // Handle any errors during the database query
-        return res.status(500).json({
-            success: false,
-            message: "Server error while fetching doctors by specialization",
-            error: error.message
-        });
+      // Handle any errors during the database query
+      return res.status(500).json({
+        success: false,
+        message: "Server error while fetching doctors",
+        error: error.message,
+      });
     }
-});
+  });
 
 
 
