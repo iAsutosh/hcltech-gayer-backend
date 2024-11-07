@@ -1,7 +1,6 @@
-# hcltech-gayer-backend
+API SPECS
 
-END POINTS:
-
+```
 {
     "api": {
         "baseUrl": "https://api.hospital.com/v1",
@@ -283,3 +282,4 @@ END POINTS:
         }
     }
 }
+```
