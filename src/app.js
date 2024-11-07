@@ -27,3 +27,4 @@ app.use("/api/v1", appointmentsRouter)
 
 
 export { app }
+// module.exports = app;
