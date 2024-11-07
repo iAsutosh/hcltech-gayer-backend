@@ -20,12 +20,12 @@ const generateAccessAndRefereshTokens = async(userId) =>{
 const registerUser = asyncHandler( async (req, res) => {
 
     const {fullName, email, password } = req.body
-    //console.log("email: ", email);
 
     if (
         [fullName, email, password].some((field) => field?.trim() === "")
     ) {
-        throw new ApiError(400, "All fields are required")
+        return res.status(400).json({"message": "All fields are required" });
+
     }
 
     const existedUser = await User.findOne({
@@ -40,14 +40,14 @@ const registerUser = asyncHandler( async (req, res) => {
         fullName,
         email, 
         password,
+        role: 'patient'
     })
 
     const createdUser = await User.findById(user._id).select(
-        "-password -refreshToken"
+        "-password"
     )
-
     if (!createdUser) {
-        throw new ApiError(500, "Something went wrong while registering the user")
+        return res.status(500).json({"message": "Something went wrong while registering the user" });
     }
 
     return res.status(201).json(
@@ -62,7 +62,8 @@ const loginUser = asyncHandler(async (req, res) =>{
     console.log(email);
 
     if (!email) {
-        throw new ApiError(400, "username or email is required")
+        return res.status(400).json({"message": "username or email is required" });
+
     }
 
 
@@ -71,13 +72,14 @@ const loginUser = asyncHandler(async (req, res) =>{
     })
 
     if (!user) {
-        throw new ApiError(404, "User does not exist")
+        return res.status(402).json({"message": "User does not exist" });
     }
 
    const isPasswordValid = await user.isPasswordCorrect(password)
 
    if (!isPasswordValid) {
-    throw new ApiError(401, "Invalid user credentials")
+    return res.status(401).json({"message": "Invalid user credentials" });
+
     }
 
    const accessToken = await generateAccessAndRefereshTokens(user._id)
@@ -122,8 +124,6 @@ const logoutUser = asyncHandler(async(req, res) => {
     .clearCookie("accessToken", options)
     .json(new ApiResponse(200, {}, "User logged Out"))
 })
-
-
 
 const getCurrentUser = asyncHandler(async(req, res) => {
     return res
@@ -181,6 +181,7 @@ const getDoctorsBySpecialization = asyncHandler(async (req, res) => {
         });
     }
 });
+
 
 
 export {
